@@ -6,7 +6,7 @@ A plugin for [HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot) that can sear
 
 ## 插件介绍
 
-本插件基于HoshinoBot V2，需搭配机器人本体使用。用户可在群内通过指令查询公会会战排名，以及设置定时推送来每小时自动获取收藏的公会排名。
+本插件基于HoshinoBot V2，需搭配机器人本体使用。用户可在群内通过指令查询公会会战排名，以及设置定时推送来每小时自动获取关注的公会排名。
 
 ## 指令介绍
 
