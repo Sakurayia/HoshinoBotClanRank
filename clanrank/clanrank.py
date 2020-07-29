@@ -40,7 +40,7 @@ async def name_query(bot, ev):
     if not len(res[0]):
         await bot.finish(ev, '抱歉没有查询到相关结果', at_sender=True)
     data = res[0]
-    data = data[:min(20, len(data))]
+    data = data[:min(10, len(data))]
     ts = res[1]
 
     if len(data) > 5:
@@ -94,7 +94,7 @@ async def leader_query(bot, ev):
     if not len(res[0]):
         await bot.finish(ev, '抱歉没有查询到相关结果', at_sender=True)
     data = res[0]
-    data = data[:min(20, len(data))]
+    data = data[:min(10, len(data))]
     ts = res[1]
 
     if len(data) > 5:
@@ -149,7 +149,7 @@ async def rank_query(bot, ev):
     if not len(res[0]):
         await bot.finish(ev, '抱歉没有查询到相关结果', at_sender=True)
     data = res[0]
-    data = data[:min(20, len(data))]
+    data = data[:min(10, len(data))]
     ts = res[1]
 
     details = ["\n".join([
@@ -199,7 +199,7 @@ async def score_query(bot, ev):
     if not len(res[0]):
         await bot.finish(ev, '抱歉没有查询到相关结果', at_sender=True)
     data = res[0]
-    data = data[:min(20, len(data))]
+    data = data[:min(10, len(data))]
     ts = res[1]
 
     details = ["\n".join([

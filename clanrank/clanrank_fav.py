@@ -8,17 +8,17 @@ from .clanfavdb import ClanFav
 from . import query
 
 sv_help = '''
-[收藏公会] 接公会名称 每小时自动推送该公会排名
-[删除收藏] 接公会名称 删除收藏的该公会
-[更新收藏] 接待更新公会名称 新公会名称
-[查看收藏] 查看当前群收藏的公会
+[关注公会] 接公会名称 每小时自动推送该公会排名
+[删除关注] 接公会名称 删除关注的该公会
+[更新关注] 接待更新公会名称 新公会名称
+[查看关注] 查看当前群关注的公会
 '''.strip()
-svfav = Service('clanrank-fav', enable_on_default=False, bundle='pcr排名', help_=sv_help)
+svfav = Service('clanrank-reminder', enable_on_default=False, bundle='pcr排名', help_=sv_help)
 
 lmt = FreqLimiter(10)
 
 
-@svfav.scheduled_job('cron', minute='15')
+@svfav.scheduled_job('cron', minute='15')  # 可在此修改定时播报的方式
 async def rank_poller():
     bot = hoshino.get_bot()
     await send_rank(bot)
@@ -88,45 +88,48 @@ async def send_rank(bot):
             svfav.logger.exception(e)
 
 
-@svfav.on_prefix(('收藏公会'))
+@svfav.on_prefix(('关注公会', '收藏公会'))
 async def add_fav(bot, ev):
     if not priv.check_priv(ev, priv.ADMIN):
-        await bot.finish(ev, '抱歉，您非管理员，无此指令使用权限', at_sender=True)
+        await bot.finish(ev, '抱歉，只有管理员才能使用该指令~', at_sender=True)
 
     # 处理输入数据
     name = ev.message.extract_plain_text()
     if len(name) == 0:
-        await bot.finish(ev, "请发送'收藏公会+公会名称'进行收藏，无需+号", at_sender=True)
+        await bot.finish(ev, "请发送'关注公会+公会名称'进行关注，无需+号", at_sender=True)
 
     try:
         db = ClanFav()
         gid = int(ev.group_id)
+        all_record = db._find(gid)
+        if len(all_record) >= 5:
+            await bot.finish(ev, "已经关注5个工会啦，请删除部分关注后再添加~", at_sender=True)
         record = db._find_by_name(gid, name)
         if record:
-            await bot.finish(ev, "该记录已经存在", at_sender=True)
+            await bot.finish(ev, "该记录已经存在了哦~", at_sender=True)
 
         if db._insert(gid, name):
-            await bot.send(ev, "收藏成功！", at_sender=True)
+            await bot.send(ev, "关注成功！", at_sender=True)
     except:
-        await bot.send(ev, "收藏失败，请联系维护组或稍后再试", at_sender=True)
+        await bot.send(ev, "关注失败，请联系维护组或稍后再试", at_sender=True)
 
 
-@svfav.on_prefix(('删除收藏'))
+@svfav.on_prefix(('删除关注', '删除收藏'))
 async def delete_fav(bot, ev):
     if not priv.check_priv(ev, priv.ADMIN):
-        await bot.finish(ev, '抱歉，您非管理员，无此指令使用权限', at_sender=True)
+        await bot.finish(ev, '抱歉，只有管理员才能使用该指令~', at_sender=True)
 
     # 处理输入数据
     name = ev.message.extract_plain_text()
     if len(name) == 0:
-        await bot.finish(ev, "请发送'删除收藏+公会名称'进行删除，无需+号", at_sender=True)
+        await bot.finish(ev, "请发送'删除关注+公会名称'进行删除，无需+号", at_sender=True)
 
     try:
         db = ClanFav()
         gid = int(ev.group_id)
         record = db._find_by_name(gid, name)
         if not record:
-            await bot.finish(ev, "未找到该记录", at_sender=True)
+            await bot.finish(ev, "未找到该记录哦~", at_sender=True)
 
         if db._delete(gid, name):
             await bot.send(ev, "删除成功！", at_sender=True)
@@ -134,15 +137,15 @@ async def delete_fav(bot, ev):
         await bot.send(ev, "删除失败，请联系维护组或稍后再试", at_sender=True)
 
 
-@svfav.on_prefix(('更新收藏'))
+@svfav.on_prefix(('更新关注', '更新收藏'))
 async def delete_fav(bot, ev):
     if not priv.check_priv(ev, priv.ADMIN):
-        await bot.finish(ev, '抱歉，您非管理员，无此指令使用权限', at_sender=True)
+        await bot.finish(ev, '抱歉，只有管理员才能使用该指令~', at_sender=True)
 
     # 处理输入数据
     msg = ev.message.extract_plain_text().split()
     if len(msg) != 2:
-        await bot.finish(ev, "请发送'更新收藏+待更新名称+更新名称'进行更新，无需+号", at_sender=True)
+        await bot.finish(ev, "请发送'更新关注+待更新名称+更新名称'进行更新，无需+号", at_sender=True)
 
     prename = msg[0]
     name = msg[1]
@@ -152,7 +155,7 @@ async def delete_fav(bot, ev):
         gid = int(ev.group_id)
         record = db._find_by_name(gid, prename)
         if not record:
-            await bot.finish(ev, "未找到该记录", at_sender=True)
+            await bot.finish(ev, "未找到该记录哦~", at_sender=True)
 
         if db._update(gid, name, prename):
             await bot.send(ev, "更新成功！", at_sender=True)
@@ -160,12 +163,12 @@ async def delete_fav(bot, ev):
         await bot.send(ev, "更新失败，请联系维护组或稍后再试", at_sender=True)
 
 
-@svfav.on_fullmatch(('查看收藏', '查询收藏'))
+@svfav.on_fullmatch(('查看关注', '查询关注', '查看收藏', '查询收藏'))
 async def query_fav(bot, ev):
     uid = ev.user_id
 
     if not lmt.check(uid):
-        await bot.finish(ev, '您查询得过于频繁，请稍等片刻', at_sender=True)
+        await bot.finish(ev, '您查询得过于频繁，请稍等片刻~', at_sender=True)
 
     lmt.start_cd(uid)
 
@@ -174,14 +177,14 @@ async def query_fav(bot, ev):
         gid = int(ev.group_id)
         record = db._find(gid)
         if len(record) == 0:
-            await bot.finish(ev, "暂无记录", at_sender=True)
+            await bot.finish(ev, "暂无关注记录哦~快去添加吧！", at_sender=True)
 
         details = [" ".join([
             f"{e[0]}",
         ]) for e in record]
 
         msg = "\n".join([
-            f"群{gid}收藏公会一览：",
+            f"群{gid}关注公会一览：",
             *details
         ])
 

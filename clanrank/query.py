@@ -51,6 +51,8 @@ async def do_query(rank, name, mode):
 
     headers = {
         "Content-Type": "application/json",
+        "Origin": 'https://kengxxiao.github.io',
+        "Referer": 'https://kengxxiao.github.io/Kyouka/'
     }
     logger.debug(f'Rank query {payload=}')
     try:
