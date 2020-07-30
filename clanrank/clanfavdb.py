@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-DB_PATH = os.path.expanduser('~/.hoshino/clan_fav.db')
+DB_PATH = os.path.expanduser('~/.hoshino/clan_fav_new.db')
 
 
 class ClanFav:

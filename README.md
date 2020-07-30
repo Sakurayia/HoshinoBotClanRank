@@ -41,6 +41,7 @@ A plugin for [HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot) that can sear
 
 + 查询公会信息时新增进度显示
 + 定时推送中新增排名和分数变化显示
++ 更改了数据库结构
 
 `v1.2`
 
