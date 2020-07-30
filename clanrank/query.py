@@ -53,7 +53,7 @@ async def do_query(rank, name, mode):
         "Content-Type": "application/json",
         "Origin": 'https://kengxxiao.github.io',
         "Referer": 'https://kengxxiao.github.io/Kyouka/',
-        "Custom-Source": ""  #请设置一个自定义的Custom-Source头来标识来源，且不要将其设置为KyoukaOfficial以和直接请求区分。
+        "Custom-Source": ""  #请设置一个自定义的Custom-Source头来标识来源，以和直接请求区分。
     }
     logger.debug(f'Rank query {payload=}')
     try:
