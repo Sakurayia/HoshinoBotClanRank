@@ -32,7 +32,7 @@ A plugin for [HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot) that can sear
 
 1. clone或download zip
 2. 将clanrank文件夹放入`hoshino/modules/`文件夹中
-3. 在`query.py`文件的56行设置自定义`Custom-Source`
+3. 在`query.py`文件的55行设置自定义`Custom-Source`
 4. 在`__bot__.py`文件的`MODULES_ON`中添加`'clanrank'`
 
 ## 更新日志
