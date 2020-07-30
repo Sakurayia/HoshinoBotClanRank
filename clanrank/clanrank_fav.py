@@ -24,10 +24,13 @@ async def rank_poller():
     await send_rank(bot)
 
 
-async def get_rank(list):
+async def get_rank(gid, list):
     msg = ""
+    db = ClanFav()
     for item in list:
         name = item[0]
+        prerank = int(item[1])
+        prescore = int(item[2])
         # 执行查询
         svfav.logger.info('Doing query...')
         res = await query.do_query(0, name, 2)
@@ -49,19 +52,30 @@ async def get_rank(list):
         data = res[0]
         data = data[:1]  # 仅保留第一条记录
         ts = res[1]
+        rank = int(data[0]['rank'])
+        score = int(data[0]['damage'])
+        rank_suf = f"▼{rank - prerank}" if rank > prerank else f"▲{prerank - rank}" if rank < prerank else ""
+        score_suf = f"▲{score - prescore}" if score > prescore else f"▼{prescore - score}" if score < prescore else ""
 
         details = ["\n".join([
             f"=={e['clan_name']}==",
-            f"公会排名：{e['rank']}",
-            f"公会伤害：{e['damage']}",
-            f"公会会长：{e['leader_name']}",
-            f"公会人数：{e['member_num']}"
+            f"排名：{e['rank']} {rank_suf}",
+            f"分数：{e['damage']} {score_suf}",
+            f"会长：{e['leader_name']}",
+            f"人数：{e['member_num']}",
+            f"进度：{query.process_data(e['damage'])}"
         ]) for e in data]
 
         msg = "\n".join([
             msg,
             details[0],
         ])
+
+        try:
+            if db._update(gid, name, name, rank, score):
+                svfav.logger.info(f"群{gid}的{name}更新成功")
+        except Exception as e:
+            svfav.logger.error(f"群{gid}的{name}更新失败, {e}")
     return msg, ts
 
 
@@ -73,7 +87,7 @@ async def send_rank(bot):
             name_list = db._find(int(gid))
             if len(name_list) == 0:
                 continue
-            res = await get_rank(name_list)
+            res = await get_rank(gid, name_list)
             message = res[0]
             ts = res[1]
             msg = "\n".join([
@@ -108,7 +122,7 @@ async def add_fav(bot, ev):
         if record:
             await bot.finish(ev, "该记录已经存在了哦~", at_sender=True)
 
-        if db._insert(gid, name):
+        if db._insert(gid, name, 0, 0):
             await bot.send(ev, "关注成功！", at_sender=True)
     except:
         await bot.send(ev, "关注失败，请联系维护组或稍后再试", at_sender=True)
@@ -157,7 +171,7 @@ async def delete_fav(bot, ev):
         if not record:
             await bot.finish(ev, "未找到该记录哦~", at_sender=True)
 
-        if db._update(gid, name, prename):
+        if db._update(gid, name, prename, 0, 0):
             await bot.send(ev, "更新成功！", at_sender=True)
     except:
         await bot.send(ev, "更新失败，请联系维护组或稍后再试", at_sender=True)

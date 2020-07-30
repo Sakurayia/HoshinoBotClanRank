@@ -51,9 +51,10 @@ async def name_query(bot, ev):
         details = ["\n".join([
             f"公会名称：{e['clan_name']}",
             f"公会排名：{e['rank']}",
-            f"公会伤害：{e['damage']}",
+            f"公会分数：{e['damage']}",
             f"公会会长：{e['leader_name']}",
             f"公会人数：{e['member_num']}",
+            f"公会进度：{query.process_data(e['damage'])}",
             f"----------"
         ]) for e in data]
 
@@ -106,8 +107,9 @@ async def leader_query(bot, ev):
             f"公会会长：{e['leader_name']}",
             f"公会名称：{e['clan_name']}",
             f"公会排名：{e['rank']}",
-            f"公会伤害：{e['damage']}",
+            f"公会分数：{e['damage']}",
             f"公会人数：{e['member_num']}",
+            f"公会进度：{query.process_data(e['damage'])}",
             f"----------"
         ]) for e in data]
 
@@ -156,8 +158,9 @@ async def rank_query(bot, ev):
         f"公会会长：{e['leader_name']}",
         f"公会名称：{e['clan_name']}",
         f"公会排名：{e['rank']}",
-        f"公会伤害：{e['damage']}",
+        f"公会分数：{e['damage']}",
         f"公会人数：{e['member_num']}",
+        f"公会进度：{query.process_data(e['damage'])}",
         f"----------"
     ]) for e in data]
 
@@ -206,8 +209,9 @@ async def score_query(bot, ev):
         f"公会会长：{e['leader_name']}",
         f"公会名称：{e['clan_name']}",
         f"公会排名：{e['rank']}",
-        f"公会伤害：{e['damage']}",
+        f"公会分数：{e['damage']}",
         f"公会人数：{e['member_num']}",
+        f"公会进度：{query.process_data(e['damage'])}",
         f"----------"
     ]) for e in data]
 

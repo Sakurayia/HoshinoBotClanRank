@@ -8,6 +8,10 @@ A plugin for [HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot) that can sear
 
 本插件基于HoshinoBot V2，需搭配机器人本体使用。用户可在群内通过指令查询公会会战排名，以及设置定时推送来每小时自动获取关注的公会排名。
 
+## 数据来源
+
+本插件数据来源 [镜华 - 公会战排名查询](https://kengxxiao.github.io/Kyouka/) ，**请不要滥用该插件给原作者带来困扰**！
+
 ## 指令介绍
 
 本插件分为两个模块：clanrank及clanrank-reminder
@@ -31,7 +35,22 @@ A plugin for [HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot) that can sear
 3. 在`query.py`文件的56行设置自定义`Custom-Source`
 4. 在`__bot__.py`文件的`MODULES_ON`中添加`'clanrank'`
 
-## 数据来源
+## 更新日志
 
-本插件数据来源 [镜华 - 公会战排名查询](https://kengxxiao.github.io/Kyouka/) ，请不要滥用该插件给原作者带来困扰！
+`v1.3`
+
++ 查询公会信息时新增进度显示
++ 定时推送中新增排名和分数变化显示
+
+`v1.2`
+
++ 新增Custom-Source请求头
+
+`v1.1`
+
++ 更改了部分触发指令及回复内容
+
+`v1.0`
+
++ 初版发布
 
