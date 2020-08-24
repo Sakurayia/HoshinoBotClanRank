@@ -62,7 +62,6 @@ async def get_rank(gid, list):
             f"排名：{e['rank']} {rank_suf}",
             f"分数：{e['damage']} {score_suf}",
             f"会长：{e['leader_name']}",
-            f"人数：{e['member_num']}",
             f"进度：{query.process_data(e['damage'])}"
         ]) for e in data]
 
